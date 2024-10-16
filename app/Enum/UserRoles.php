@@ -4,14 +4,15 @@ namespace App\Enum;
 
 enum UserRoles: string
 {
-    case Admin = 'admin';
-    case User = 'user';
+    case ADMIN = 'admin';
+    case USER = 'user';
+
 
     public static function getValues(): array
     {
         return [
-            self::Admin,
-            self::User,
+            self::ADMIN,
+            self::USER,
         ];
     }
 }
