@@ -12,8 +12,19 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (auth('api')->attempt($credentials)) {
             $token = auth()->user()->createToken('authToken')->plainTextToken;
-            return response()->json(['token' => $token], 200);
+            return response()->json(['token' => $token]);
         }
         return response()->json(['message' => 'Unauthenticated'], 401);
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    public function me(Request $request): JsonResponse
+    {
+        return response()->json($request->user());
     }
 }
