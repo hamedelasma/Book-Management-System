@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
+use App\Enum\UserRoles;
 use App\Models\Book;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class BookPolicy
 {
@@ -13,7 +13,7 @@ class BookPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class BookPolicy
      */
     public function view(User $user, Book $book): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class BookPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
     }
 
     /**
@@ -37,7 +37,7 @@ class BookPolicy
      */
     public function update(User $user, Book $book): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
     }
 
     /**
@@ -45,7 +45,7 @@ class BookPolicy
      */
     public function delete(User $user, Book $book): bool
     {
-        return $user->role === 'admin';
+        return $user->role === UserRoles::ADMIN;
     }
 
     /**
@@ -53,7 +53,8 @@ class BookPolicy
      */
     public function restore(User $user, Book $book): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
+
     }
 
     /**
@@ -61,6 +62,7 @@ class BookPolicy
      */
     public function forceDelete(User $user, Book $book): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
+
     }
 }

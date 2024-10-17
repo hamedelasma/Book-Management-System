@@ -44,4 +44,26 @@ class Author extends Model
     {
         return ucfirst($value);
     }
+
+    //---------------------- Scopes ----------------------//
+
+    public function scopeName($query, $name)
+    {
+        return $query->where('name', 'like', "%$name%");
+    }
+
+    public function scopeWithBooksCount($query)
+    {
+        return $query->withCount('books');
+    }
+
+    public function scopeWithBooksTitle($query)
+    {
+        return $query->with('books:title');
+    }
+
+    public function scopeWithBooks($query)
+    {
+        return $query->with('books');
+    }
 }
