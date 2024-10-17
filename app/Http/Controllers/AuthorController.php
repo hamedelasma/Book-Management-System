@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 use App\Models\Author;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -24,9 +27,9 @@ class AuthorController extends Controller
         ]);
         $authors = Author::query()
             ->withCount('books')
-            ->when($request->has('name'), fn ($query) => $query->name($request->name))
-            ->when($request->has('with_books_title'), fn ($query) => $query->withBooksTitle())
-            ->when($request->has('sort'), fn ($query) => $query->orderBy($request->sort, $request->get('order', 'asc')))
+            ->when($request->has('name'), fn($query) => $query->name($request->name))
+            ->when($request->has('with_books_title'), fn($query) => $query->withBooksTitle())
+            ->when($request->has('sort'), fn($query) => $query->orderBy($request->sort, $request->get('order', 'asc')))
             ->paginate($request->get('per_page', 10));
 
         return response()->json($authors);
@@ -76,6 +79,8 @@ class AuthorController extends Controller
                 'message' => 'Author cannot be deleted because it has books',
             ], 409);
         }
+
+        $this->authorize('delete', $author);
 
         $author->delete();
 

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enum\UserRoles;
 use App\Models\Author;
 use App\Models\User;
 
@@ -12,7 +13,7 @@ class AuthorPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -20,7 +21,7 @@ class AuthorPolicy
      */
     public function view(User $user, Author $author): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -28,7 +29,7 @@ class AuthorPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
     }
 
     /**
@@ -36,7 +37,7 @@ class AuthorPolicy
      */
     public function update(User $user, Author $author): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
     }
 
     /**
@@ -44,7 +45,7 @@ class AuthorPolicy
      */
     public function delete(User $user, Author $author): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
     }
 
     /**
@@ -52,7 +53,7 @@ class AuthorPolicy
      */
     public function restore(User $user, Author $author): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
     }
 
     /**
@@ -60,6 +61,6 @@ class AuthorPolicy
      */
     public function forceDelete(User $user, Author $author): bool
     {
-        //
+        return $user->role === UserRoles::ADMIN;
     }
 }
