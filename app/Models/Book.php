@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Book extends Model
 {
     /** @use HasFactory<\Database\Factories\BookFactory> */
-    use HasFactory , SoftDeletes;
+    use HasFactory , SoftDeletes, Searchable;
 
     protected $fillable = ['author_id', 'isbn', 'title', 'genre', 'year', 'publisher', 'image'];
 
