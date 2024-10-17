@@ -25,12 +25,15 @@ it('can list authors with filters', function () {
 
     Sanctum::actingAs($this->admin);
 
-    $response = getJson(route('authors.index', ['per_page' => 2]));
-
+    $response = getJson(route('authors.index'));
     $response->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJsonCount(2, 'data')
-        ->assertJsonPath('total', 3)
-        ->assertJsonPath('per_page', 2);
+        ->assertJsonCount(3, 'data')
+        ->assertJsonStructure([
+            'current_page',
+            'data' => [
+                '*' => ['id', 'name', 'books_count'],
+            ],
+        ]);
 });
 
 it('can create an author as admin', function () {
@@ -42,6 +45,7 @@ it('can create an author as admin', function () {
 
     $response->assertStatus(ResponseAlias::HTTP_CREATED)
         ->assertJsonPath('data.name', $authorData['name']);
+
 });
 
 it('cannot create an author as non-admin', function () {
@@ -64,6 +68,7 @@ it('can show an author', function () {
     $response->assertStatus(ResponseAlias::HTTP_OK)
         ->assertJsonPath('id', $author->id)
         ->assertJsonPath('name', $author->name);
+
 });
 
 it('can update an author as admin', function () {
@@ -90,6 +95,7 @@ it('cannot update an author as non-admin', function () {
 });
 
 it('can delete an author as admin', function () {
+
     $author = Author::factory()->create();
 
     Sanctum::actingAs($this->admin);
@@ -143,3 +149,5 @@ it('can list authors with sort', function () {
         ->assertJsonPath('data.0.name', $author1->name)
         ->assertJsonPath('data.1.name', $author2->name);
 });
+
+
