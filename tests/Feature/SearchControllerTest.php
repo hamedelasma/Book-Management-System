@@ -14,12 +14,12 @@ beforeEach(function () {
 });
 
 it('can search books', function () {
+    Book::factory(100)->create();
     $book = Book::factory()->create(['title' => 'Test Book']);
 
     Sanctum::actingAs($this->admin);
 
     $response = getJson(route('books.search', ['search' => 'Test']));
-
     $response->assertStatus(ResponseAlias::HTTP_OK)
         ->assertJsonCount(1)
         ->assertJsonPath('0.title', $book->title);
