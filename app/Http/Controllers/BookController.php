@@ -30,7 +30,7 @@ class BookController extends Controller
         $books = Book::query()
             ->with('author')
             ->when($request->has('search'), fn ($query) => $query->search($request->search))
-            ->when($request->has('author'), fn ($query) => $query->author($request->author))
+            ->when($request->has('author'), fn ($query) => $query->authorName($request->author))
             ->when($request->has('genre'), fn ($query) => $query->genre($request->genre))
             ->when($request->has('year'), fn ($query) => $query->year($request->year))
             ->when($request->has('publisher'), fn ($query) => $query->publisher($request->publisher))

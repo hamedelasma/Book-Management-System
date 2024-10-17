@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enum\UserRoles;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBookRequest extends FormRequest
 {
@@ -24,8 +25,8 @@ class UpdateBookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'author_id' => ['sometimes', 'integer', 'exists:authors,id'],
-            'isbn' => ['sometimes', 'string', 'unique:books,isbn,'.$this->route('book')->id],
+            'author_id' => ['sometimes', 'integer', Rule::exists('authors', 'id')->whereNull('deleted_at')],
+            'isbn' => ['sometimes', 'string', Rule::unique('books', 'isbn')->ignore($this->id)],
             'title' => ['sometimes', 'string'],
             'genre' => ['sometimes', 'string'],
             'year' => ['sometimes', 'integer'],
