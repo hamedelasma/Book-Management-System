@@ -14,7 +14,6 @@ class Author extends Model
 
     protected $fillable = ['name'];
 
-
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
     //---------------------- Relationships ----------------------//
@@ -23,13 +22,11 @@ class Author extends Model
         return $this->hasMany(Book::class);
     }
 
-
     //---------------------- Accessors & Mutators ----------------------//
     public function getBooksCountAttribute(): int
     {
         return $this->books()->count();
     }
-
 
     public function getBooksTitleAttribute(): ?string
     {

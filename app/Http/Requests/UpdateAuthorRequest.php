@@ -24,7 +24,7 @@ class UpdateAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string', 'max:255', 'unique:authors,name,' . $this->author->id],
+            'name' => ['string', 'max:255', 'unique:authors,name,'.$this->author->id],
         ];
     }
 

@@ -25,7 +25,7 @@ class UpdateBookRequest extends FormRequest
     {
         return [
             'author_id' => ['sometimes', 'integer', 'exists:authors,id'],
-            'isbn' => ['sometimes', 'string', 'unique:books,isbn,' . $this->route('book')->id],
+            'isbn' => ['sometimes', 'string', 'unique:books,isbn,'.$this->route('book')->id],
             'title' => ['sometimes', 'string'],
             'genre' => ['sometimes', 'string'],
             'year' => ['sometimes', 'integer'],
@@ -36,6 +36,6 @@ class UpdateBookRequest extends FormRequest
 
     protected function failedAuthorization()
     {
-        Throw new AuthorizationException('You are not authorized to update a book');
+        throw new AuthorizationException('You are not authorized to update a book');
     }
 }

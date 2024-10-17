@@ -29,12 +29,12 @@ class BookController extends Controller
 
         $books = Book::query()
             ->with('author')
-            ->when($request->has('search'), fn($query) => $query->search($request->search))
-            ->when($request->has('author'), fn($query) => $query->author($request->author))
-            ->when($request->has('genre'), fn($query) => $query->genre($request->genre))
-            ->when($request->has('year'), fn($query) => $query->year($request->year))
-            ->when($request->has('publisher'), fn($query) => $query->publisher($request->publisher))
-            ->when($request->has('sort'), fn($query) => $query->orderBy($request->sort, $request->get('order', 'asc')))
+            ->when($request->has('search'), fn ($query) => $query->search($request->search))
+            ->when($request->has('author'), fn ($query) => $query->author($request->author))
+            ->when($request->has('genre'), fn ($query) => $query->genre($request->genre))
+            ->when($request->has('year'), fn ($query) => $query->year($request->year))
+            ->when($request->has('publisher'), fn ($query) => $query->publisher($request->publisher))
+            ->when($request->has('sort'), fn ($query) => $query->orderBy($request->sort, $request->get('order', 'asc')))
             ->paginate($request->get('per_page', 10));
 
         return response()->json($books);
@@ -50,7 +50,7 @@ class BookController extends Controller
 
         return response()->json([
             'message' => 'Book created successfully',
-            'data' => $book
+            'data' => $book,
         ], 201);
     }
 
@@ -60,7 +60,7 @@ class BookController extends Controller
     public function show(Book $book): JsonResponse
     {
         return response()->json([
-            'data' => $book
+            'data' => $book,
         ]);
     }
 
@@ -73,7 +73,7 @@ class BookController extends Controller
 
         return response()->json([
             'message' => 'Book updated successfully',
-            'data' => $book
+            'data' => $book,
         ]);
     }
 
@@ -85,7 +85,7 @@ class BookController extends Controller
         $book->delete();
 
         return response()->json([
-            'message' => 'Book deleted successfully'
+            'message' => 'Book deleted successfully',
         ]);
     }
 }

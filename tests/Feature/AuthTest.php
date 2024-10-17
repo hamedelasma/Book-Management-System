@@ -19,7 +19,7 @@ it('can log in a user with valid credentials', function () {
     ]);
 
     $response->assertStatus(200)
-        ->assertJson(fn(AssertableJson $json) => $json->has('token'));
+        ->assertJson(fn (AssertableJson $json) => $json->has('token'));
 });
 
 it('cannot log in a user with invalid credentials', function () {
@@ -34,30 +34,29 @@ it('cannot log in a user with invalid credentials', function () {
     ]);
 
     $response->assertStatus(401)
-        ->assertJson(fn(AssertableJson $json) => $json->where('message', 'Unauthenticated'));
+        ->assertJson(fn (AssertableJson $json) => $json->where('message', 'Unauthenticated'));
 });
 
 it('can log out a user', function () {
     $user = User::factory()->create();
     $token = $user->createToken('authToken')->plainTextToken;
 
-    $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+    $response = $this->withHeader('Authorization', 'Bearer '.$token)
         ->postJson(route('logout'));
 
     $response->assertStatus(200)
-        ->assertJson(fn(AssertableJson $json) => $json->where('message', 'Logged out successfully'));
+        ->assertJson(fn (AssertableJson $json) => $json->where('message', 'Logged out successfully'));
 });
-
 
 it('can get the authenticated user', function () {
     $user = User::factory()->create();
     $token = $user->createToken('authToken')->plainTextToken;
 
-    $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+    $response = $this->withHeader('Authorization', 'Bearer '.$token)
         ->getJson(route('user'));
 
     $response->assertStatus(200)
-        ->assertJson(fn(AssertableJson $json) => $json->where('email', $user->email)
+        ->assertJson(fn (AssertableJson $json) => $json->where('email', $user->email)
             ->etc()
         );
 });

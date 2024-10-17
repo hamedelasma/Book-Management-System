@@ -5,6 +5,7 @@ use App\Models\Book;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
+
 use function Pest\Laravel\actingAs;
 
 uses(RefreshDatabase::class);
@@ -13,7 +14,7 @@ beforeEach(function () {
     $this->adminUser = User::factory([
         'role' => UserRoles::ADMIN,
     ])->create();
-    actingAs($this->adminUser,'auth');
+    actingAs($this->adminUser, 'auth');
 });
 
 it('can list books with filters', function () {
@@ -31,7 +32,7 @@ it('can list books with filters', function () {
     ]));
 
     $response->assertStatus(200)
-        ->assertJson(fn(AssertableJson $json) => $json->has('data')
+        ->assertJson(fn (AssertableJson $json) => $json->has('data')
             ->has('links')
             ->has('meta')
         );
@@ -50,7 +51,7 @@ it('can create a book', function () {
     $response = $this->postJson(route('books.store'), $bookData);
 
     $response->assertStatus(201)
-        ->assertJson(fn(AssertableJson $json) => $json->where('message', 'Book created successfully')
+        ->assertJson(fn (AssertableJson $json) => $json->where('message', 'Book created successfully')
             ->has('data')
         );
 
@@ -63,7 +64,7 @@ it('can show a book', function () {
     $response = $this->getJson(route('books.show', $book));
 
     $response->assertStatus(200)
-        ->assertJson(fn(AssertableJson $json) => $json->has('data')
+        ->assertJson(fn (AssertableJson $json) => $json->has('data')
             ->where('data.id', $book->id)
         );
 });
@@ -78,7 +79,7 @@ it('can update a book', function () {
     $response = $this->putJson(route('books.update', $book), $updateData);
 
     $response->assertStatus(200)
-        ->assertJson(fn(AssertableJson $json) => $json->where('message', 'Book updated successfully')
+        ->assertJson(fn (AssertableJson $json) => $json->where('message', 'Book updated successfully')
             ->has('data')
         );
 
@@ -91,7 +92,7 @@ it('can delete a book', function () {
     $response = $this->deleteJson(route('books.destroy', $book));
 
     $response->assertStatus(200)
-        ->assertJson(fn(AssertableJson $json) => $json->where('message', 'Book deleted successfully')
+        ->assertJson(fn (AssertableJson $json) => $json->where('message', 'Book deleted successfully')
         );
 
     $this->assertDatabaseMissing('books', ['id' => $book->id]);

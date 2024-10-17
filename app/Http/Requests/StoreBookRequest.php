@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enum\UserRoles;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreBookRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class StoreBookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'author_id' => ['required', 'integer', 'exists:authors,id'],
+            'author_id' => ['required', 'integer', Rule::exists('authors', 'id')->whereNull('deleted_at')],
             'isbn' => ['required', 'string', 'unique:books,isbn'],
             'title' => ['required', 'string'],
             'genre' => ['required', 'string'],
@@ -36,6 +37,6 @@ class StoreBookRequest extends FormRequest
 
     protected function failedAuthorization()
     {
-        Throw new AuthorizationException('You are not authorized to create a book');
+        throw new AuthorizationException('You are not authorized to create a book');
     }
 }

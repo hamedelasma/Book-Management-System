@@ -17,18 +17,16 @@ class AuthorController extends Controller
     {
         $request->validate([
             'name' => 'string',
-            'with_books_count' => 'boolean',
-            'with_books_title' => 'boolean',
             'sort' => 'string|in:id,name,created_at',
             'order' => 'string|in:asc,desc',
-            'per_page' => 'integer',
+            'with_books_title' => 'boolean',
+            'per_page' => 'integer|min:1|max:100',
         ]);
         $authors = Author::query()
             ->withCount('books')
-            ->when($request->has('name'), fn($query) => $query->name($request->name))
-            ->when($request->has('with_books_count'), fn($query) => $query->withBooksCount())
-            ->when($request->has('with_books_title'), fn($query) => $query->withBooksTitle())
-            ->when($request->has('sort'), fn($query) => $query->orderBy($request->sort, $request->get('order', 'asc')))
+            ->when($request->has('name'), fn ($query) => $query->name($request->name))
+            ->when($request->has('with_books_title'), fn ($query) => $query->withBooksTitle())
+            ->when($request->has('sort'), fn ($query) => $query->orderBy($request->sort, $request->get('order', 'asc')))
             ->paginate($request->get('per_page', 10));
 
         return response()->json($authors);
@@ -43,7 +41,7 @@ class AuthorController extends Controller
 
         return response()->json([
             'message' => 'Author created successfully',
-            'data' => $author
+            'data' => $author,
         ], 201);
     }
 
@@ -55,7 +53,6 @@ class AuthorController extends Controller
         return response()->json($author->load('books')->append(['books_count']));
     }
 
-
     /**
      * Update the specified resource in storage.
      */
@@ -65,7 +62,7 @@ class AuthorController extends Controller
 
         return response()->json([
             'message' => 'Author updated successfully',
-            'data' => $author
+            'data' => $author,
         ]);
     }
 
@@ -74,10 +71,16 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author): JsonResponse
     {
+        if ($author->books()->exists()) {
+            return response()->json([
+                'message' => 'Author cannot be deleted because it has books',
+            ], 409);
+        }
+
         $author->delete();
 
         return response()->json([
-            'message' => 'Author deleted successfully'
+            'message' => 'Author deleted successfully',
         ]);
     }
 }
