@@ -18,7 +18,7 @@ it('can search books', function () {
 
     Sanctum::actingAs($this->admin);
 
-    $response = getJson(route('books.search', ['search' =>'Test']));
+    $response = getJson(route('books.search', ['search' => 'Test']));
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
         ->assertJsonCount(1)
