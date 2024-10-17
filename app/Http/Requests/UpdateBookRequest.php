@@ -26,7 +26,7 @@ class UpdateBookRequest extends FormRequest
     {
         return [
             'author_id' => ['sometimes', 'integer', Rule::exists('authors', 'id')->whereNull('deleted_at')],
-            'isbn' => ['sometimes', 'string', Rule::unique('books', 'isbn')->ignore($this->id)],
+            'isbn' => ['sometimes', 'string', Rule::unique('books', 'isbn')->ignore($this->route('book')->id)],
             'title' => ['sometimes', 'string'],
             'genre' => ['sometimes', 'string'],
             'year' => ['sometimes', 'integer'],
