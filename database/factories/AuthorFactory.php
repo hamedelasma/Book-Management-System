@@ -21,15 +21,15 @@ class AuthorFactory extends Factory
         ];
     }
 
-    public function withBooks(int $count = 1): self
-    {
-        return $this->hasBooks($count);
-    }
-
-    public function hasBooks(int $count = 1): self
-    {
-        return $this->afterCreating(function (\App\Models\Author $author) use ($count) {
-            \App\Models\Book::factory($count)->create(['author_id' => $author->id]);
-        });
-    }
+//    public function withBooks(int $count = 1): self
+//    {
+//        return $this->hasBooks($count);
+//    }
+//
+//    public function hasBooks(int $count = 1): self
+//    {
+//        return $this->afterCreating(function (\App\Models\Author $author) use ($count) {
+//            \App\Models\Book::factory($count)->create(['author_id' => $author->id]);
+//        });
+//    }
 }
