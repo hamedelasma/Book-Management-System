@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\UserRoles;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAuthorRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreAuthorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->user()->role === UserRoles::ADMIN;
     }
 
     /**
@@ -22,7 +23,7 @@ class StoreAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255', 'unique:authors,name'],
         ];
     }
 }

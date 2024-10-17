@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\UserRoles;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAuthorRequest extends FormRequest
@@ -11,7 +12,7 @@ class UpdateAuthorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->user()->role === UserRoles::ADMIN;
     }
 
     /**
@@ -22,7 +23,7 @@ class UpdateAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['string', 'max:255', 'unique:authors,name,' . $this->author->id],
         ];
     }
 }
