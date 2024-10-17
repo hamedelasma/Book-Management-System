@@ -24,6 +24,17 @@ class Book extends Model
         ];
     }
 
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'isbn' => $this->isbn,
+            'title' => $this->title,
+            'genre' => $this->genre,
+            'year' => $this->year,
+        ];
+    }
+
     //---------------------- Relationships ----------------------//
 
     public function author(): BelongsTo
