@@ -19,10 +19,11 @@ class BookFactory extends Factory
         return [
             'isbn' => $this->faker->unique()->isbn13,
             'title' => $this->faker->sentence,
-            'author' => $this->faker->name,
             'genre' => $this->faker->word,
             'year' => $this->faker->year,
             'publisher' => $this->faker->company,
+
+            'author_id' => \App\Models\Author::factory(),
         ];
     }
 }
