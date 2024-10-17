@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enum\UserRoles;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAuthorRequest extends FormRequest
@@ -25,5 +26,10 @@ class UpdateAuthorRequest extends FormRequest
         return [
             'name' => ['string', 'max:255', 'unique:authors,name,' . $this->author->id],
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('You are not authorized to update an author');
     }
 }

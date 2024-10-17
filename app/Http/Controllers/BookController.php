@@ -17,21 +17,24 @@ class BookController extends Controller
     {
         $request->validate([
             'search' => ['nullable', 'string'],
+            'author' => ['nullable', 'string'],
             'genre' => ['nullable', 'string'],
             'year' => ['nullable', 'integer'],
             'publisher' => ['nullable', 'string'],
-            'sort_by' => ['nullable', 'string', 'in:isbn,title,author,genre,year,publisher'],
-            'sort' => [ 'string', 'in:asc,desc'],
-            'per_page' => ['nullable', 'integer','min:1', 'max:100'],
+            'sort' => ['nullable', 'string', 'in:isbn,title,author,genre,year,publisher'],
+            'order' => ['string', 'in:asc,desc'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
             'page' => ['nullable', 'integer'],
         ]);
 
         $books = Book::query()
-            ->when($request->search, fn($query, $search) => $query->search($search))
-            ->when($request->genre, fn($query, $genre) => $query->where('genre', $genre))
-            ->when($request->year, fn($query, $year) => $query->where('year', $year))
-            ->when($request->publisher, fn($query, $publisher) => $query->where('publisher', $publisher))
-            ->when($request->sort_by, fn($query, $sort_by) => $query->orderBy($sort_by, $request->get('sort', 'asc')))
+            ->with('author')
+            ->when($request->has('search'), fn($query) => $query->search($request->search))
+            ->when($request->has('author'), fn($query) => $query->author($request->author))
+            ->when($request->has('genre'), fn($query) => $query->genre($request->genre))
+            ->when($request->has('year'), fn($query) => $query->year($request->year))
+            ->when($request->has('publisher'), fn($query) => $query->publisher($request->publisher))
+            ->when($request->has('sort'), fn($query) => $query->orderBy($request->sort, $request->get('order', 'asc')))
             ->paginate($request->get('per_page', 10));
 
         return response()->json($books);

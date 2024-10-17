@@ -24,9 +24,9 @@ class UpdateBookRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'author_id' => ['sometimes', 'integer', 'exists:authors,id'],
             'isbn' => ['sometimes', 'string', 'unique:books,isbn,' . $this->route('book')->id],
             'title' => ['sometimes', 'string'],
-            'author' => ['sometimes', 'string'],
             'genre' => ['sometimes', 'string'],
             'year' => ['sometimes', 'integer'],
             'publisher' => ['sometimes', 'string'],

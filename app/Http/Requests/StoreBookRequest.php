@@ -24,9 +24,9 @@ class StoreBookRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'author_id' => ['required', 'integer', 'exists:authors,id'],
             'isbn' => ['required', 'string', 'unique:books,isbn'],
             'title' => ['required', 'string'],
-            'author' => ['required', 'string'],
             'genre' => ['required', 'string'],
             'year' => ['required', 'integer'],
             'publisher' => ['required', 'string'],

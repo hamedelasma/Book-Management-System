@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enum\UserRoles;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAuthorRequest extends FormRequest
@@ -25,5 +26,10 @@ class StoreAuthorRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', 'unique:authors,name'],
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('You are not authorized to create an author');
     }
 }
