@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Book extends Model
 {
     /** @use HasFactory<\Database\Factories\BookFactory> */
     use HasFactory;
 
-    protected $fillable = ['isbn', 'title', 'author', 'genre', 'year', 'publisher', 'image'];
+    protected $fillable = ['author_id', 'isbn', 'title', 'genre', 'year', 'publisher', 'image'];
+
 
     protected function casts(): array
     {
@@ -18,6 +20,17 @@ class Book extends Model
             'isbn' => 'string',
         ];
     }
+
+
+    //---------------------- Relationships ----------------------//
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(Author::class);
+    }
+
+
+    //---------------------- Accessors & Mutators ----------------------//
 
     public function getGenreAttribute($value): string
     {
@@ -56,6 +69,16 @@ class Book extends Model
         return $value ? asset('storage/' . $value) : '';
     }
 
+
+    //---------------------- Scopes ----------------------//
+
+    public function scopeAuthorName($query, $authorName): void
+    {
+        $query->whereHas('author', function ($query) use ($authorName) {
+            $query->where('name', 'like', '%' . $authorName . '%');
+        });
+    }
+
     public function scopeSearch($query, $search): void
     {
         $query->where('title', 'like', '%' . $search . '%')
@@ -81,10 +104,6 @@ class Book extends Model
         $query->whereLike('publisher', $publisher);
     }
 
-    public function scopeAuthor($query, $author): void
-    {
-        $query->whereLike('author', $author);
-    }
 
     public function scopeIsbn($query, $isbn): void
     {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Author;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +13,10 @@ return new class extends Migration {
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Author::class);
+            $table->string('genre');
             $table->string('isbn')->unique();
             $table->string('title');
-            $table->string('author');
-            $table->string('genre');
             $table->integer('year');
             $table->string('publisher');
             $table->string('image')->nullable();
