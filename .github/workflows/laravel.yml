@@ -27,10 +27,6 @@ jobs:
         image: getmeili/meilisearch:v1.10
         ports:
           - 7700:7700
-        options: >
-          --health-cmd="curl http://localhost:7700/health || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
 
     steps:
       - uses: actions/checkout@v4
