@@ -24,6 +24,7 @@ services:
         depends_on:
             - mysql
             - redis
+            - meilisearch
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -63,6 +64,14 @@ services:
                 - ping
             retries: 3
             timeout: 5s
+    meilisearch:
+        image: 'getmeili/meilisearch:latest'
+        ports:
+            - '7700:7700'
+        environment:
+            MEILI_NO_ANALYTICS: 'true'
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
