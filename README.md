@@ -100,3 +100,14 @@ php artisan test
 ```
 https://books.ribal.ly
 ```
+
+## Users Credentials
+
+- Admin
+  - Email:admin@example.com
+  - Password:password
+- User
+  - Email:user@example.com
+  - Password:password
+
+
