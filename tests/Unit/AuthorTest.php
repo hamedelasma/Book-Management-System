@@ -5,9 +5,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(Tests\TestCase::class, RefreshDatabase::class);
 
-
-it('can create author', function () {
-
+it('can create an author', function () {
     $data = [
         'name' => 'John Doe',
     ];
@@ -17,10 +15,13 @@ it('can create author', function () {
     expect($author)->toBeInstanceOf(Author::class)
         ->and($author->name)->toBe('John Doe');
 
+    $this->assertDatabaseHas('authors', [
+        'id' => $author->id,
+        'name' => 'John Doe',
+    ]);
 });
 
-it('can update author', function () {
-
+it('can update an author', function () {
     $author = Author::factory()->create();
 
     $author->update([
@@ -29,18 +30,23 @@ it('can update author', function () {
 
     expect($author->name)->toBe('Jane Doe');
 
+    $this->assertDatabaseHas('authors', [
+        'id' => $author->id,
+        'name' => 'Jane Doe',
+    ]);
 });
 
-it('can delete author', function () {
-
+it('can delete an author', function () {
     $author = Author::factory()->create();
 
     $author->delete();
 
     expect(Author::find($author->id))->toBeNull();
 
+    $this->assertSoftDeleted('authors', [
+        'id' => $author->id,
+    ]);
 });
-
 
 it('can list authors', function () {
     $authors = Author::factory()->count(3)->create();
@@ -52,16 +58,16 @@ it('can list authors', function () {
     });
 });
 
-
-it('can show author', function () {
+it('can show an author', function () {
     $author = Author::factory()->create();
 
-    $author = Author::find($author->id);
+    $foundAuthor = Author::find($author->id);
 
-    expect($author)->toBeInstanceOf(Author::class);
+    expect($foundAuthor)->toBeInstanceOf(Author::class)
+        ->and($foundAuthor->id)->toBe($author->id);
 });
 
-it('can search author', function () {
+it('can search authors', function () {
     $author = Author::factory()->create(['name' => 'John Doe']);
 
     $authors = Author::where('name', 'like', '%John%')->get();
@@ -74,7 +80,7 @@ it('can search author', function () {
 });
 
 it('can paginate authors', function () {
-     Author::factory()->count(10)->create();
+    Author::factory()->count(10)->create();
 
     $authors = Author::paginate(5);
 
@@ -84,6 +90,3 @@ it('can paginate authors', function () {
         expect($author)->toBeInstanceOf(Author::class);
     });
 });
-
-
-
