@@ -36,7 +36,7 @@ deleting, and searching books, along with user authentication and role-based acc
 
 1. **Clone the repository**
    ```sh
-   git clone https://github.com/hamedelasma/bookstore-management-system.git
+   git clone https://github.com/hamedelasma/Book-Management-System.git
    cd bookstore-management-system
    ```
 
